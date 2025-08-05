@@ -1,40 +1,32 @@
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { connectDB } from './config/database';
 import authRoutes from './routes/auth';
 import plaidRoutes from './routes/plaid';
-import transactionRoutes from './routes/transactions';
+import transactionsRoutes from './routes/transactions';
+import budgetsRoutes from './routes/budgets';
+import goalsRoutes from './routes/goals';
+import { connectDB } from './config/database';
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(helmet());
 app.use(cors());
-app.use(morgan('combined'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/plaid', plaidRoutes);
-app.use('/api/transactions', transactionRoutes);
+app.use('/api/transactions', transactionsRoutes);
+app.use('/api/budgets', budgetsRoutes);
+app.use('/api/goals', goalsRoutes);
 
-// Health check endpoint
+// Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
-
-// Error handling middleware
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
 });
 
 // Start server

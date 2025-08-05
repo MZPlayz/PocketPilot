@@ -42,45 +42,24 @@ router.get('/', authenticateToken, async (req: AuthRequest, res) => {
   }
 });
 
-// Get transaction by ID
-router.get('/:id', authenticateToken, async (req: AuthRequest, res) => {
+// Update transaction category
+router.put('/:id/category', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const userId = req.user?.id;
     const transactionId = req.params.id;
+    const { category } = req.body;
 
-    const transaction = db.getTransactionById(transactionId);
+    const transactions = db.getTransactionsByUser(userId!);
+    const transactionIndex = transactions.findIndex(t => t.id === transactionId);
     
-    if (!transaction || transaction.userId !== userId) {
+    if (transactionIndex === -1) {
       return res.status(404).json({ error: 'Transaction not found' });
     }
 
-    res.json({ transaction });
-  } catch (error) {
-    console.error('Error fetching transaction:', error);
-    res.status(500).json({ error: 'Failed to fetch transaction' });
-  }
-});
-
-// Update transaction
-router.put('/:id', authenticateToken, async (req: AuthRequest, res) => {
-  try {
-    const userId = req.user?.id;
-    const transactionId = req.params.id;
-    const { category, notes, tags } = req.body;
-
-    const transaction = db.getTransactionById(transactionId);
+    // Update the transaction
+    transactions[transactionIndex].category = category;
     
-    if (!transaction || transaction.userId !== userId) {
-      return res.status(404).json({ error: 'Transaction not found' });
-    }
-
-    const updatedTransaction = db.updateTransaction(transactionId, {
-      category,
-      notes,
-      tags,
-    });
-
-    res.json({ transaction: updatedTransaction });
+    res.json({ transaction: transactions[transactionIndex] });
   } catch (error) {
     console.error('Error updating transaction:', error);
     res.status(500).json({ error: 'Failed to update transaction' });
