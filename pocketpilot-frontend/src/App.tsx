@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, NavLink } from 'react-router-dom';
-import './App.css';
 import TransactionsPage from './pages/TransactionsPage';
 import BudgetsPage from './pages/BudgetsPage';
 import GoalsPage from './pages/GoalsPage';
@@ -11,20 +10,20 @@ import DashboardPage from './pages/DashboardPage';
 function App() {
   return (
     <Router>
-      <div className="App">
-        <nav>
-          <h1>PocketPilot</h1>
+      <div className="min-h-screen bg-primary-dark text-white flex">
+        <nav className="w-64 bg-secondary-dark p-5">
+          <h1 className="text-2xl font-bold mb-10">PocketPilot</h1>
           <ul>
-            <li><NavLink to="/" end>Dashboard</NavLink></li>
-            <li><NavLink to="/transactions">Transactions</NavLink></li>
-            <li><NavLink to="/budgets">Budgets</NavLink></li>
-            <li><NavLink to="/goals">Goals</NavLink></li>
-            <li><NavLink to="/login">Login</NavLink></li>
-            <li><NavLink to="/register">Register</NavLink></li>
+            <li className="mb-4"><NavLink to="/" end className={({ isActive }) => isActive ? "text-accent-green" : "hover:text-accent-green"}>Dashboard</NavLink></li>
+            <li className="mb-4"><NavLink to="/transactions" className={({ isActive }) => isActive ? "text-accent-green" : "hover:text-accent-green"}>Transactions</NavLink></li>
+            <li className="mb-4"><NavLink to="/budgets" className={({ isActive }) => isActive ? "text-accent-green" : "hover:text-accent-green"}>Budgets</NavLink></li>
+            <li className="mb-4"><NavLink to="/goals" className={({ isActive }) => isActive ? "text-accent-green" : "hover:text-accent-green"}>Goals</NavLink></li>
+            <li className="mb-4"><NavLink to="/login" className={({ isActive }) => isActive ? "text-accent-green" : "hover:text-accent-green"}>Login</NavLink></li>
+            <li className="mb-4"><NavLink to="/register" className={({ isActive }) => isActive ? "text-accent-green" : "hover:text-accent-green"}>Register</NavLink></li>
           </ul>
         </nav>
 
-        <main className="main-content">
+        <main className="flex-1 p-10">
           <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/transactions" element={<TransactionsPage />} />
